@@ -11,32 +11,42 @@
 
 <body>
   <main>
-    <form method="POST" action="process_input.php">
+    <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
       <div class="container overflow-hidden text-center">
         <div class="row gy-5">
           <div class="col-6">
             <div class="p-3">
-              <input type="number" class="form-control" id="gasAmount" name="gasAmount" placeholder="You Will See The Gas Amount Here.">
+              <input type="number" class="form-control" name="gasAmount" step="0.01" placeholder="You Will See The Gas Amount Here.">
             </div>
           </div>
         </div>
         <div class="col-6">
           <div class="p-3">
-            <input type="number" class="form-control" id="gasPrice" name="gasPrice" placeholder="You Will See The Gas Price Here.">
+            <input type="number" class="form-control" name="gasPrice" step="0.01" placeholder="You Will See The Gas Price Here.">
           </div>
         </div>
         <div class="col-6">
           <div class="p-3">
-            <input type="number" class="form-control" id="totalPrice" name="totalPrice" placeholder="You Will See The Total Price Here." readonly></input>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="p-3">
-            <button type="submit" id="calcBtn" class="btn btn-primary btn-lg btn-success">Calculate</button>
+            <button type="submit" class="btn btn-primary btn-lg btn-success">Calculate</button>
           </div>
         </div>
       </div>
     </form>
+
+
+    <?php
+
+    $totalPrice = 0;
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      $gasPrice = filter_input(INPUT_POST, "gasPrice", FILTER_SANITIZE_NUMBER_FLOAT);
+      $gasAmount = filter_input(INPUT_POST, "gasAmount", FILTER_SANITIZE_NUMBER_FLOAT);
+      $totalPrice = $gasAmount * $gasPrice;
+    }
+    echo $totalPrice;
+    ?>
+
+
   </main>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
