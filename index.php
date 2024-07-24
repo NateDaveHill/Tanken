@@ -39,15 +39,21 @@
 
     session_start();
 
-    $tempTotalPrice = 0;
-    $totalPrice = 0;
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-      $gasPrice = filter_input(INPUT_POST, "gasPrice");
-      $gasAmount = filter_input(INPUT_POST, "gasAmount");
-      $tempTotalPrice = $gasAmount * $gasPrice;
-      $totalPrice += $tempTotalPrice;
+    if (!isset($_SESSION['totalPrice'])) {
+      $_SESSION['totalPrice'] = 0;
     }
+
+    // Handle form submission
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      $gasAmount = isset($_POST['gasAmount']) ? (float)$_POST['gasAmount'] : 0;
+      $gasPrice = isset($_POST['gasPrice']) ? (float)$_POST['gasPrice'] : 0;
+      $newResult = $gasAmount * $gasPrice;
+
+      // Add the new result to the current total price
+      $_SESSION['totalPrice'] += $newResult;
+    }
+
+    $totalPrice = $_SESSION['totalPrice'];
 
     echo "You have to pay: " . $totalPrice . " Euros.";
     ?>
