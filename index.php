@@ -54,7 +54,7 @@ $totalPrice = isset($_SESSION['totalPrice']) ? $_SESSION['totalPrice'] : 0;
         </div>
         <div class="row justify-content-md-center center my-3">
           <div class="col-sm-auto">
-            <button type="submit" name="reset" class="btn btn-primary btn-lg btn-danger">Rest</button>
+            <button type="submit" name="reset" class="btn btn-primary btn-lg btn-danger">Reset</button>
           </div>
         </div>
         <div class="row justify-content-md-center center my-3">
