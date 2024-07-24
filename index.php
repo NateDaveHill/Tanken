@@ -11,10 +11,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $gasPrice = isset($_POST['gasPrice']) ? (float)$_POST['gasPrice'] : 0;
     $newResult = $gasAmount * $gasPrice;
 
-    // Add the new result to the current total price
     $_SESSION['totalPrice'] += $newResult;
   } elseif (isset($_POST['reset'])) {
-    // Reset the session total price
     $_SESSION['totalPrice'] = 0;
   }
 }
