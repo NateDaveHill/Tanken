@@ -6,11 +6,17 @@ if (!isset($_SESSION['totalPrice'])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $gasAmount = isset($_POST['gasAmount']) ? (float)$_POST['gasAmount'] : 0;
-  $gasPrice = isset($_POST['gasPrice']) ? (float)$_POST['gasPrice'] : 0;
-  $newResult = $gasAmount * $gasPrice;
+  if (isset($_POST['calculate'])) {
+    $gasAmount = isset($_POST['gasAmount']) ? (float)$_POST['gasAmount'] : 0;
+    $gasPrice = isset($_POST['gasPrice']) ? (float)$_POST['gasPrice'] : 0;
+    $newResult = $gasAmount * $gasPrice;
 
-  $_SESSION['totalPrice'] += $newResult;
+    // Add the new result to the current total price
+    $_SESSION['totalPrice'] += $newResult;
+  } elseif (isset($_POST['reset'])) {
+    // Reset the session total price
+    $_SESSION['totalPrice'] = 0;
+  }
 }
 
 $totalPrice = isset($_SESSION['totalPrice']) ? $_SESSION['totalPrice'] : 0;
@@ -28,21 +34,35 @@ $totalPrice = isset($_SESSION['totalPrice']) ? $_SESSION['totalPrice'] : 0;
   <title>Tanken</title>
 </head>
 
-<body>
+<body class="custom-bg">
   <main>
-    <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-      <div class="container overflow-hidden text-center center">
-        <div class="center">
-          <input type="number" class="form-control" name="gasAmount" min="0" placeholder="Amount">
+    <form method="POST" action="">
+      <h1 class="center my-5">Gas up here!</h1>
+      <div class="container">
+        <div class=" row justify-content-md-center center my-3">
+          <div class="col-sm-auto">
+            <input type="number" class="form-control" name="gasAmount" min="0" placeholder="Amount">
+          </div>
         </div>
-        <div class="center">
-          <input type="" class="form-control" name="gasPrice" step="0.01" min="0" placeholder="Current Gas Price">
+        <div class="row justify-content-md-center center my-3">
+          <div class="col-sm-auto">
+            <input type="" class="form-control" name="gasPrice" step="0.01" min="0" placeholder="Current Gas Price">
+          </div>
         </div>
-        <div class="center">
-          <button type="submit" class="btn btn-primary btn-lg btn-success">Calculate</button>
+        <div class="row justify-content-md-center center my-3">
+          <div class="col-sm-auto">
+            <button type="submit" name="calculate" class="btn btn-primary btn-lg btn-warning">Calculate</button>
+          </div>
         </div>
-        <div class="center">
-          <h3>You have to pay: <?php echo htmlspecialchars($totalPrice); ?> Euros.</h3>
+        <div class="row justify-content-md-center center my-3">
+          <div class="col-sm-auto">
+            <button type="submit" name="reset" class="btn btn-primary btn-lg btn-danger">Rest</button>
+          </div>
+        </div>
+        <div class="row justify-content-md-center center my-3">
+          <div class="col-sm-auto">
+            <h3>You have to pay: <?php echo htmlspecialchars($totalPrice); ?> Euros.</h3>
+          </div>
         </div>
       </div>
     </form>
