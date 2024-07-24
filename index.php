@@ -1,3 +1,21 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['totalPrice'])) {
+  $_SESSION['totalPrice'] = 0;
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $gasAmount = isset($_POST['gasAmount']) ? (float)$_POST['gasAmount'] : 0;
+  $gasPrice = isset($_POST['gasPrice']) ? (float)$_POST['gasPrice'] : 0;
+  $newResult = $gasAmount * $gasPrice;
+
+  $_SESSION['totalPrice'] += $newResult;
+}
+
+$totalPrice = isset($_SESSION['totalPrice']) ? $_SESSION['totalPrice'] : 0;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,52 +31,21 @@
 <body>
   <main>
     <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-      <div class="container overflow-hidden text-center">
-        <div class="row gy-5">
-          <div class="col-6">
-            <div class="p-3">
-              <input type="number" class="form-control" name="gasAmount" min="0" placeholder="Amount">
-            </div>
-          </div>
+      <div class="container overflow-hidden text-center center">
+        <div class="center">
+          <input type="number" class="form-control" name="gasAmount" min="0" placeholder="Amount">
         </div>
-        <div class="col-6">
-          <div class="p-3">
-            <input type="" class="form-control" name="gasPrice" step="0.01" min="0" placeholder="Current Gas Price">
-          </div>
+        <div class="center">
+          <input type="" class="form-control" name="gasPrice" step="0.01" min="0" placeholder="Current Gas Price">
         </div>
-        <div class="col-6">
-          <div class="p-3">
-            <button type="submit" class="btn btn-primary btn-lg btn-success">Calculate</button>
-          </div>
+        <div class="center">
+          <button type="submit" class="btn btn-primary btn-lg btn-success">Calculate</button>
+        </div>
+        <div class="center">
+          <h3>You have to pay: <?php echo htmlspecialchars($totalPrice); ?> Euros.</h3>
         </div>
       </div>
     </form>
-
-
-    <?php
-
-    session_start();
-
-    if (!isset($_SESSION['totalPrice'])) {
-      $_SESSION['totalPrice'] = 0;
-    }
-
-    // Handle form submission
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-      $gasAmount = isset($_POST['gasAmount']) ? (float)$_POST['gasAmount'] : 0;
-      $gasPrice = isset($_POST['gasPrice']) ? (float)$_POST['gasPrice'] : 0;
-      $newResult = $gasAmount * $gasPrice;
-
-      // Add the new result to the current total price
-      $_SESSION['totalPrice'] += $newResult;
-    }
-
-    $totalPrice = $_SESSION['totalPrice'];
-
-    echo "You have to pay: " . $totalPrice . " Euros.";
-    ?>
-
-
   </main>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
